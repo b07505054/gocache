@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package cachepb;
+
+option go_package = "github.com/b07505054/gocache/api/proto;cachepb";
+
+service CacheService {
+  rpc GetCached(CacheRequest) returns (CacheResponse);
+  rpc OwnerGet(CacheRequest) returns (CacheResponse);
+}
+
+message CacheRequest {
+  string key = 1;
+}
+
+message CacheResponse {
+  bytes value = 1;
+}

@@ -8,13 +8,22 @@ import (
 	"strings"
 	"time"
 
+	"net"
+
+	cachepb "github.com/b07505054/gocache/api/proto"
 	"github.com/b07505054/gocache/internal/cache"
 	"github.com/b07505054/gocache/internal/peer"
+
+	transportgrpc "github.com/b07505054/gocache/internal/transportgrpc"
+	"google.golang.org/grpc"
 )
 
 func main() {
+
 	addr := flag.String("addr", ":8080", "server listen address")
 	self := flag.String("self", "nodeA", "current node name")
+	grpcAddr := flag.String("grpc_addr", ":9090", "grpc listen address")
+	transport := flag.String("transport", "http", "peer transport: http or grpc")
 	peersFlag := flag.String("peers", "", "comma-separated peer mappings in node=url form")
 	flag.Parse()
 
@@ -27,10 +36,32 @@ func main() {
 
 	if *peersFlag != "" {
 		picker := peer.NewMapPicker(*self, 50)
-		picker.SetHTTPPeers(parsePeers(*peersFlag))
+
+		if *transport == "grpc" {
+			if err := picker.SetGRPCPeers(parsePeers(*peersFlag)); err != nil {
+				log.Fatal(err)
+			}
+		} else {
+			picker.SetHTTPPeers(parsePeers(*peersFlag))
+		}
+
 		c.RegisterPeers(picker)
 	}
 
+	go func() {
+		lis, err := net.Listen("tcp", *grpcAddr)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		grpcServer := grpc.NewServer()
+		cachepb.RegisterCacheServiceServer(grpcServer, transportgrpc.NewServer(c))
+
+		log.Println("grpc server running on", *grpcAddr, "as", *self)
+		if err := grpcServer.Serve(lis); err != nil {
+			log.Fatal(err)
+		}
+	}()
 	// Internal peer-to-peer endpoint
 	http.Handle("/cache", c.HTTPHandler())
 

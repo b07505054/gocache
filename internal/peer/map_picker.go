@@ -74,3 +74,30 @@ func (p *MapPicker) PickPeer(key string) (Getter, bool) {
 	getter, ok := p.getters[node]
 	return getter, ok
 }
+
+// SetGRPCPeers registers peers using node name -> grpc address mapping.
+func (p *MapPicker) SetGRPCPeers(peers map[string]string) error {
+	p.mu.Lock()
+	defer p.mu.Unlock()
+
+	p.hashRing = hash.New(p.replicas)
+	p.getters = make(map[string]Getter)
+
+	nodes := make([]string, 0, len(peers))
+	for node, addr := range peers {
+		nodes = append(nodes, node)
+
+		if node == p.self {
+			continue
+		}
+
+		getter, err := NewGRPCGetter(addr)
+		if err != nil {
+			return err
+		}
+		p.getters[node] = getter
+	}
+
+	p.hashRing.Add(nodes...)
+	return nil
+}

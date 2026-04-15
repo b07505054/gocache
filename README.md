@@ -1,4 +1,4 @@
-\# Gocache: Distributed Cache with Owner-Based Routing
+# Gocache: Distributed Cache with Owner-Based Routing
 
 
 
@@ -6,11 +6,11 @@ A production-style distributed in-memory cache built in Go, featuring consistent
 
 
 
-\---
+---
 
 
 
-\## 🚀 Overview
+## 🚀 Overview
 
 
 
@@ -18,21 +18,21 @@ Gocache is a distributed cache system where:
 
 
 
-\- Requests can enter any node
+- Requests can enter any node
 
-\- Keys are routed to owner nodes via consistent hashing
+- Keys are routed to owner nodes via consistent hashing
 
-\- Only the owner node performs load-on-miss
+- Only the owner node performs load-on-miss
 
-\- Nodes communicate via gRPC for efficient internal RPC
-
-
-
-\---
+- Nodes communicate via gRPC for efficient internal RPC
 
 
 
-\## 🧠 Architecture
+---
+
+
+
+## 🧠 Architecture
 
 
 
@@ -40,113 +40,113 @@ Client → Node A (HTTP entry) → gRPC → Node B (owner)
 
 
 
-\- HTTP server: handles client requests
+- HTTP server: handles client requests
 
-\- gRPC server: handles inter-node communication
+- gRPC server: handles inter-node communication
 
-\- Owner node: performs backend load and stores cache
-
-
-
-\---
+- Owner node: performs backend load and stores cache
 
 
 
-\## ✨ Key Features
+---
 
 
 
-\### 🔹 Owner-Based Load-on-Miss
+## ✨ Key Features
+
+
+
+### 🔹 Owner-Based Load-on-Miss
 
 Only the responsible node loads data from backend, preventing duplicate loads across nodes.
 
 
 
-\### 🔹 Consistent Hashing
+### 🔹 Consistent Hashing
 
 Distributes keys across nodes with minimal remapping during scaling.
 
 
 
-\### 🔹 gRPC Communication
+### 🔹 gRPC Communication
 
 Efficient binary RPC for node-to-node interaction.
 
 
 
-\### 🔹 LRU + TTL Cache
+### 🔹 LRU + TTL Cache
 
-\- LRU eviction
+- LRU eviction
 
-\- TTL expiration
+- TTL expiration
 
-\- Memory-safe design
+- Memory-safe design
 
 
 
-\### 🔹 Singleflight
+### 🔹 Singleflight
 
 Prevents cache stampede under high concurrency.
 
 
 
-\---
+---
 
 
 
-\## ⚙️ Tech Stack
+## ⚙️ Tech Stack
 
 
 
-\- Go (goroutines, sync primitives)
+- Go (goroutines, sync primitives)
 
-\- gRPC + Protobuf
+- gRPC + Protobuf
 
-\- Consistent Hashing
+- Consistent Hashing
 
-\- LRU Cache
+- LRU Cache
 
-\- HTTP + gRPC dual-server architecture
-
-
-
-\---
+- HTTP + gRPC dual-server architecture
 
 
 
-\## 🧪 Demo
+---
 
 
 
-\### 1️⃣ Start Node B (owner first)
+## 🧪 Demo
 
 
 
-
-
-go run ./cmd/server -addr=:8082 -grpc\_addr=:9092 -self=nodeB -transport=grpc -peers="nodeA=localhost:9091,nodeB=localhost:9092"
+### 1️⃣ Start Node B (owner first)
 
 
 
 
 
-\### 2️⃣ Start Node A
+go run ./cmd/server -addr=:8082 -grpc_addr=:9092 -self=nodeB -transport=grpc -peers="nodeA=localhost:9091,nodeB=localhost:9092"
 
 
 
 
 
-go run ./cmd/server -addr=:8081 -grpc\_addr=:9091 -self=nodeA -transport=grpc -peers="nodeA=localhost:9091,nodeB=localhost:9092"
+### 2️⃣ Start Node A
 
 
 
 
 
-\---
+go run ./cmd/server -addr=:8081 -grpc_addr=:9091 -self=nodeA -transport=grpc -peers="nodeA=localhost:9091,nodeB=localhost:9092"
 
 
 
-\### 3️⃣ Send request
+
+
+---
+
+
+
+### 3️⃣ Send request
 
 
 
@@ -160,11 +160,11 @@ curl "http://localhost:8081/get?key=user:123
 
 
 
-\---
+---
 
 
 
-\### 4️⃣ Example Response
+### 4️⃣ Example Response
 
 
 
@@ -176,15 +176,15 @@ curl "http://localhost:8081/get?key=user:123
 
 
 
-\---
+---
 
 
 
-\### 🔥 Key Observation
+### 🔥 Key Observation
 
 
 
-Even though the request hits \*\*nodeA\*\*, the actual load happens on \*\*nodeB\*\*.
+Even though the request hits **nodeA**, the actual load happens on **nodeB**.
 
 
 
@@ -200,49 +200,49 @@ OWNER LOAD for key: user:123 on nodeB
 
 
 
-\---
+---
 
 
 
-\## 📈 What This Demonstrates
+## 📈 What This Demonstrates
 
 
 
-\- Distributed key routing
+- Distributed key routing
 
-\- Owner-based execution model
+- Owner-based execution model
 
-\- Separation of client entry and system communication
+- Separation of client entry and system communication
 
-\- Real multi-node coordination via gRPC
-
-
-
-\---
+- Real multi-node coordination via gRPC
 
 
 
-\## 🔮 Future Work
+---
 
 
 
-\- Service discovery (etcd)
-
-\- Prometheus metrics
-
-\- Circuit breaker / retry logic
-
-\- Kubernetes deployment
-
-\- Replication \& fault tolerance
+## 🔮 Future Work
 
 
 
-\---
+- Service discovery (etcd)
+
+- Prometheus metrics
+
+- Circuit breaker / retry logic
+
+- Kubernetes deployment
+
+- Replication & fault tolerance
 
 
 
-\## 🧑‍💻 Author
+---
+
+
+
+## 🧑‍💻 Author
 
 
 

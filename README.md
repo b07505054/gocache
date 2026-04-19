@@ -10,7 +10,7 @@ A production-style distributed in-memory cache built in Go, featuring consistent
 
 
 
-## 🚀 Overview
+##  Overview
 
 
 
@@ -32,7 +32,7 @@ Gocache is a distributed cache system where:
 
 
 
-## 🧠 Architecture
+##  Architecture
 
 
 
@@ -52,29 +52,29 @@ Client → Node A (HTTP entry) → gRPC → Node B (owner)
 
 
 
-## ✨ Key Features
+##  Key Features
 
 
 
-### 🔹 Owner-Based Load-on-Miss
+###  Owner-Based Load-on-Miss
 
 Only the responsible node loads data from backend, preventing duplicate loads across nodes.
 
 
 
-### 🔹 Consistent Hashing
+###  Consistent Hashing
 
 Distributes keys across nodes with minimal remapping during scaling.
 
 
 
-### 🔹 gRPC Communication
+###  gRPC Communication
 
 Efficient binary RPC for node-to-node interaction.
 
 
 
-### 🔹 LRU + TTL Cache
+###  LRU + TTL Cache
 
 - LRU eviction
 
@@ -84,7 +84,7 @@ Efficient binary RPC for node-to-node interaction.
 
 
 
-### 🔹 Singleflight
+###  Singleflight
 
 Prevents cache stampede under high concurrency.
 
@@ -94,7 +94,7 @@ Prevents cache stampede under high concurrency.
 
 
 
-## ⚙️ Tech Stack
+##  Tech Stack
 
 
 
@@ -114,11 +114,11 @@ Prevents cache stampede under high concurrency.
 
 
 
-## 🧪 Demo
+##  Demo
 
 
 
-### 1️⃣ Start Node B (owner first)
+### 1️ Start Node B (owner first)
 
 
 
@@ -130,7 +130,7 @@ go run ./cmd/server -addr=:8082 -grpc_addr=:9092 -self=nodeB -transport=grpc -pe
 
 
 
-### 2️⃣ Start Node A
+### 2️ Start Node A
 
 
 
@@ -146,7 +146,7 @@ go run ./cmd/server -addr=:8081 -grpc_addr=:9091 -self=nodeA -transport=grpc -pe
 
 
 
-### 3️⃣ Send request
+### 3️ Send request
 
 
 
@@ -164,7 +164,7 @@ curl "http://localhost:8081/get?key=user:123
 
 
 
-### 4️⃣ Example Response
+### 4️ Example Response
 
 
 
@@ -180,7 +180,7 @@ curl "http://localhost:8081/get?key=user:123
 
 
 
-### 🔥 Key Observation
+###  Key Observation
 
 
 
@@ -204,7 +204,7 @@ OWNER LOAD for key: user:123 on nodeB
 
 
 
-## 📈 What This Demonstrates
+##  What This Demonstrates
 
 
 
@@ -222,7 +222,7 @@ OWNER LOAD for key: user:123 on nodeB
 
 
 
-## 🔮 Future Work
+##  Future Work
 
 
 
@@ -242,7 +242,7 @@ OWNER LOAD for key: user:123 on nodeB
 
 
 
-## 🧑‍💻 Author
+##  Author
 
 
 
